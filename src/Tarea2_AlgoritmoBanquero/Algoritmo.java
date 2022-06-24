@@ -6,6 +6,7 @@ import java.util.Scanner;
 public class Algoritmo {
 
     private int necesarios[][],
+        
             asignados[][],
             maximos[][],
             disponibles[][],
@@ -13,12 +14,22 @@ public class Algoritmo {
             numeroRecursos;
 
     private void entrada() {
+        
         try (Scanner sc = new Scanner(System.in)) {
-            System.out.print("Ingrese no. de los procesos y recursos : \n");
-            numeroProcesos = sc.nextInt();  //no. de procesos
+            
+            System.out.print("Ingrese numero de procesos: ");
+            numeroProcesos = sc.nextInt();
+            
+            System.out.print("Ingrese numero de recursos: ");
+            
+              //no. de procesos
             numeroRecursos = sc.nextInt();  //no. de recursos
+            
+            System.out.print("\n");
+            
             necesarios = new int[numeroProcesos][numeroRecursos];  //inicializacion de arrays
             maximos = new int[numeroProcesos][numeroRecursos];
+            
             asignados = new int[numeroProcesos][numeroRecursos];
             disponibles = new int[1][numeroRecursos];
             
