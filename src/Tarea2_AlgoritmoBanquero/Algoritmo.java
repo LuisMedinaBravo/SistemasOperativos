@@ -5,26 +5,52 @@ import java.util.Scanner;
 
 public class Algoritmo {
 
-    private int necesarios[][],
+    public int necesarios[][],
         
             asignados[][],
             maximos[][],
-            disponibles[][],
-            numeroProcesos,
-            numeroRecursos;
+            disponibles[][];
+        public String Procesos;
+        public String Recursos;
+        
+        public int numeroProcesos;
+        public int numeroRecursos;
 
     private void entrada() {
         
+        int validarProcesos=0;
+        int validarRecursos=0;
+        
         try (Scanner sc = new Scanner(System.in)) {
             
-            System.out.print("Ingrese numero de procesos: ");
-            numeroProcesos = sc.nextInt();
             
-            System.out.print("Ingrese numero de recursos: ");
             
-              //no. de procesos
-            numeroRecursos = sc.nextInt();  //no. de recursos
+            while(validarProcesos ==  0){
+                    
+                    //numero de procesos
+                    System.out.print("Ingrese numero de procesos: ");
+                    
+                    Procesos = sc.nextLine();
+                    System.out.println();
+                   
+                    validarProcesos = ValidarEntrada(Procesos);
+            }
             
+            numeroProcesos=Integer.parseInt(Procesos);
+            
+            while(validarRecursos ==  0){
+                    
+                    //numero de recursos
+                    System.out.print("Ingrese numero de recursos: ");
+                   
+                    Recursos = sc.nextLine();
+                    System.out.println();
+                    
+                  
+                    validarRecursos = ValidarEntrada(Recursos);
+            }
+           
+            numeroRecursos=Integer.parseInt(Recursos);
             System.out.print("\n");
             
             necesarios = new int[numeroProcesos][numeroRecursos];  //inicializacion de arrays
@@ -103,4 +129,30 @@ public class Algoritmo {
             System.out.println("Todos los procesos se pueden asignar de forma segura");
         }
     }
+    
+    
+    public int ValidarEntrada(String Entrada){
+            
+            
+            ///es numero?
+            try{
+                //si es numero
+                int esNumero=Integer.parseInt(Entrada);
+                
+                if((esNumero>0)){
+                    return 1;
+                }
+                else{
+                    return 0;
+                }   
+                
+                
+            }catch(Exception e){
+                //no es numero
+                return 0;
+            }
+            
+        }
+    
+    
 }
