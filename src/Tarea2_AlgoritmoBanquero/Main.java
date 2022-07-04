@@ -6,6 +6,9 @@ public class Main {
     
         public static void main(String[] args) {
         
-            new Algoritmo().esSeguro();
+            //new Algoritmo().esSeguro();
+            
+            LeerArchivo2 a = new LeerArchivo2();
+            
     }
 }
