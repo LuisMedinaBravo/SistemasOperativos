@@ -26,33 +26,32 @@ public class LeerArchivo2 {
 		try (BufferedReader br = new BufferedReader(new FileReader(file))) {
 			
 			String line;
-			br.read();
+			
 			contLineas=0;
 			while ((line = br.readLine()) != null) {
 				
 				StringTokenizer str_arr = new StringTokenizer(line);
-				if (str_arr.hasMoreTokens()) {
+				
+				nextToken = str_arr.nextToken();
+				if (contLineas == 1) {
 					
-					nextToken = str_arr.nextToken();
-					System.out.println("next token1: " +nextToken);
-					if (contLineas == 1) {
-						
-						listaRecursos.add(Integer.parseInt(nextToken));
-					} else if (contLineas > 2 && nextToken.equals("proceso") == false) {
-						listaProcesos.add(Integer.parseInt(nextToken));
-					}
-				}	
+
+					listaRecursos.add(Integer.parseInt(nextToken));
+				} else if (contLineas > 2 && nextToken.equals("proceso") == false) {
+					listaProcesos.add(Integer.parseInt(nextToken));
+				}
 				if (nextToken.equals("proceso") == false) {
 					while (str_arr.hasMoreTokens()) {
-						
+						nextToken = str_arr.nextToken();
 						if (contLineas == 1) {
 							
+
 							listaRecursos.add(Integer.parseInt(nextToken));
 						} else if (contLineas > 2) {
 							listaProcesos.add(Integer.parseInt(nextToken));
 						}
-						nextToken = str_arr.nextToken();
-						System.out.println("next token2: " +nextToken);
+						
+						
 					}
 				} else {
 					listaSolicitudes.add(line);
