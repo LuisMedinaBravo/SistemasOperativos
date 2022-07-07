@@ -16,12 +16,7 @@ public class Algoritmo {
         public String Recursos;
         
         int vuelta=0;
-        int contadorToken=0;
                             
-                        
-        
-        public int numeroProcesos;
-        public int numeroRecursos;
         public int nSolicitados;
 
     public void entrada(ArrayList<Integer> numeroRecursos, ArrayList<Integer> numeroProcesos, ArrayList<String> izquierda, ArrayList<String> derecha) {
@@ -44,39 +39,9 @@ public class Algoritmo {
         
         try (Scanner sc = new Scanner(System.in)) {    
             
-            /*
-            while(validarProcesos ==  0){
-                    
-                    //numero de procesos
-                    System.out.print("Ingrese numero de procesos: ");
-                    
-                    Procesos = sc.nextLine();
-                    System.out.println();
-                   
-                    validarProcesos = ValidarEntrada(Procesos);
-            }
             
-            numeroProcesos=Integer.parseInt(Procesos);
-            */
-            /*
-            while(validarRecursos ==  0){
-                    
-                    //numero de recursos
-                    System.out.print("Ingrese numero de recursos: ");
-                   
-                    Recursos = sc.nextLine();
-                    System.out.println();
-                    
-                  
-                    validarRecursos = ValidarEntrada(Recursos);
-            }
-           
-            numeroRecursos=Integer.parseInt(Recursos);
-            System.out.print("\n");
-            */
-            
-            necesarios = new int[numeroProcesos.size()][numeroRecursos.size()];  //inicializacion de arrays
-            maximos = new int[numeroProcesos.size()][numeroRecursos.size()];
+            necesarios = new int[numeroProcesos.size()/3][numeroRecursos.size()];  //inicializacion de arrays
+            maximos = new int[numeroProcesos.size()/3][numeroRecursos.size()];
             
             asignados = new int[nSolicitados][numeroRecursos.size()];
             disponibles = new int[1][numeroRecursos.size()];
@@ -85,44 +50,38 @@ public class Algoritmo {
             System.out.println("Introduzca matriz de asignados -->"); ///derechs separar por tokens
             for (int i = 0; i < nSolicitados; i++) {
                 for (int j = 0; j < numeroRecursos.size(); j++) {
-                    StringTokenizer st = null;
+                    
+                    
                     //asignados[i][j] = sc.nextInt();  //matriz de asignados
-                    for (int k = 0; k < derecha.size(); k++) {
-                        st = new StringTokenizer(derecha.get(k));
-                        System.out.println(st);
-                        break;
-                    }
-                    
-                    
-                    while (st.hasMoreTokens()){ 
                         
-                        String nextToken = st.nextToken();
+                        String[] parts = derecha.get(vuelta).split(" ");
                         
-                        if(contadorToken==0){
-                            
-                            asignados[i][j]= Integer.parseInt(nextToken);
+                        String part1 = parts[0];
+                        
+                        int parte1 = Integer.parseInt(part1);
+                        
+                        String part2 = parts[1]; 
+                        
+                        int parte2 = Integer.parseInt(part2);
+                        
+                        String part3 = parts[2]; 
+                        
+                        int parte3 = Integer.parseInt(part3);
+                        
+                        //System.out.println(part1);
+                        //System.out.println(part2);
+                        //System.out.println(part3);
+                        
+                        if(j==0){
+                            asignados[i][j] = parte1;
+                        }else if(j==1){
+                            asignados[i][j] = parte2;
+                        }else if(j==2){
+                            asignados[i][j] = parte3;
                         }
-                        if(contadorToken==1){
-                            asignados[i][j]= Integer.parseInt(nextToken);
-                        }
-                        if(contadorToken==2){
-                            asignados[i][j]= Integer.parseInt(nextToken);
-                        }
-                        //System.out.println(st.nextToken());
-                        contadorToken++;
-                    }
-                    
-                    
-                    vuelta++;          
                 }
-                contadorToken=0;
+                vuelta++;
             }
-            
-            
-            
-            
-            
-            
             
             
             vuelta=0;
@@ -142,7 +101,7 @@ public class Algoritmo {
                 
             }
             
-            System.out.println(nSolicitados);
+         
             System.out.println("----------------------------------------------------------");
             System.out.println("Introduzca matriz disponibles -->"); //numeroRecursos
             for (int j = 0; j < numeroRecursos.size(); j++) {
@@ -153,9 +112,9 @@ public class Algoritmo {
         }
     }
 
-    private int[][] calculoNecesarios() {
-        for (int i = 0; i < numeroProcesos; i++) {
-            for (int j = 0; j < numeroRecursos; j++) //calculando matriz de necesarios
+    private int[][] calculoNecesarios(int numRecursos, int numProcesos) {
+        for (int i = 0; i < numProcesos; i++) {
+            for (int j = 0; j < numRecursos; j++) //calculando matriz de necesarios
             {
                 necesarios[i][j] = maximos[i][j] - asignados[i][j];
             }
@@ -164,9 +123,9 @@ public class Algoritmo {
         return necesarios;
     }
 
-    private boolean chequear(int i) {
+    private boolean chequear(int i, int numRecursos) {
         //chequeando si todos los recursos para el proceso pueden ser asignados
-        for (int j = 0; j < numeroRecursos; j++) {
+        for (int j = 0; j < numRecursos; j++) {
             if (disponibles[0][j] < necesarios[i][j]) {
                 return false;
             }
@@ -179,14 +138,18 @@ public class Algoritmo {
     	
         this.nSolicitados=listaSolicitudes;
         entrada(numeroRecursos, numeroProcesos, izquierda, derecha);
-        calculoNecesarios();
+        calculoNecesarios(numeroRecursos.size(),numeroProcesos.size()/3);
         boolean done[] = new boolean[nSolicitados];
         int j = 0;
-       
+  
+        
+        try{
+        
+        
         while (j < nSolicitados) {  //hasta que todos los procesos se asignen
             boolean asignado = false;
-            for (int i = 0; i < numeroProcesos.size(); i++) {
-                if (!done[j] && chequear(i)) {  //intentando asignar
+            for (int i = 0; i < numeroProcesos.size()/3; i++) {
+                if (!done[j] && chequear(i,numeroRecursos.size())) {  //intentando asignar
                     for (int k = 0; k < numeroRecursos.size(); k++) {
                         disponibles[0][k] = disponibles[0][k] - necesarios[i][k] + maximos[i][k];
                     }
@@ -194,21 +157,26 @@ public class Algoritmo {
                     System.out.print("Proceso "+i+" asigna:");
                     for (int k = 0; k < numeroRecursos.size(); k++) {
                     	System.out.print(asignados[j][k]);
-					}
+                    }
                     System.out.println("");
                     asignado = done[j] = true;
                     j++;
+                    
                 }
             }
             if (!asignado) {
                 break;  //si no esta asignado
             }
+            if (j == numeroProcesos.size()/3) //si todos los procesos estan asignados
+            {
+                System.out.println("\nAsignado de forma segura");
+            } else {
+                System.out.println("Todos los procesos se pueden asignar de forma segura");
+            }   
         }
-        if (j == numeroProcesos.size()) //si todos los procesos estan asignados
-        {
-            System.out.println("\nAsignado de forma segura");
-        } else {
-            System.out.println("Todos los procesos se pueden asignar de forma segura");
+        
+        }catch(Exception e){
+            System.out.println("Error");
         }
     }
     

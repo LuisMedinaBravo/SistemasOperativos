@@ -113,11 +113,11 @@ public class LeerArchivo2 {
 		}
 		System.out.println("Izquierda: ");
 		for (int i = 0; i < izquierda.size(); i++) {
-			System.out.println(izquierda.get(i));
+			//System.out.println(izquierda.get(i));
 		}
                 System.out.println("Derecha: ");
 		for (int i = 0; i < derecha.size(); i++) {
-			System.out.println(derecha.get(i));
+			//System.out.println(derecha.get(i));
 		}
                 
                 
