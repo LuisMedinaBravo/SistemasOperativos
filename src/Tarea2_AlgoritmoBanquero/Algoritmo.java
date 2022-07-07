@@ -2,6 +2,7 @@ package Tarea2_AlgoritmoBanquero;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.StringTokenizer;
 
 
 public class Algoritmo {
@@ -14,17 +15,34 @@ public class Algoritmo {
         public String Procesos;
         public String Recursos;
         
+        int vuelta=0;
+        int contadorToken=0;
+                            
+                        
+        
         public int numeroProcesos;
         public int numeroRecursos;
         public int nSolicitados;
 
     public void entrada(ArrayList<Integer> numeroRecursos, ArrayList<Integer> numeroProcesos, ArrayList<String> izquierda, ArrayList<String> derecha) {
         
-        int validarProcesos=0;
-        int validarRecursos=0;
+      
+        int[] arrayRecursos = new int[numeroRecursos.size()];
+        int[] arrayProcesos = new int[numeroProcesos.size()];
         
-        try (Scanner sc = new Scanner(System.in)) {
-            
+        System.out.println("Lista Recursos: ");
+        for(int i = 0; i < numeroRecursos.size(); i++){ 
+            arrayRecursos[i] = numeroRecursos.get(i);
+            //System.out.println(arrayRecursos[i]);
+        }
+        System.out.println("Lista Procesos: ");
+        for(int i = 0; i < numeroProcesos.size(); i++){ 
+            arrayProcesos[i] = numeroProcesos.get(i);
+            //System.out.println(arrayProcesos[i]);
+        }
+        
+        
+        try (Scanner sc = new Scanner(System.in)) {    
             
             /*
             while(validarProcesos ==  0){
@@ -64,21 +82,73 @@ public class Algoritmo {
             disponibles = new int[1][numeroRecursos.size()];
             
             
-            System.out.println("Introduzca matriz de asignados -->"); ///derechs
+            System.out.println("Introduzca matriz de asignados -->"); ///derechs separar por tokens
             for (int i = 0; i < nSolicitados; i++) {
                 for (int j = 0; j < numeroRecursos.size(); j++) {
-                    asignados[i][j] = sc.nextInt();  //matriz de asignados
+                    StringTokenizer st = null;
+                    //asignados[i][j] = sc.nextInt();  //matriz de asignados
+                    for (int k = 0; k < derecha.size(); k++) {
+                        st = new StringTokenizer(derecha.get(k));
+                        System.out.println(st);
+                        break;
+                    }
+                    
+                    
+                    while (st.hasMoreTokens()){ 
+                        
+                        String nextToken = st.nextToken();
+                        
+                        if(contadorToken==0){
+                            
+                            asignados[i][j]= Integer.parseInt(nextToken);
+                        }
+                        if(contadorToken==1){
+                            asignados[i][j]= Integer.parseInt(nextToken);
+                        }
+                        if(contadorToken==2){
+                            asignados[i][j]= Integer.parseInt(nextToken);
+                        }
+                        //System.out.println(st.nextToken());
+                        contadorToken++;
+                    }
+                    
+                    
+                    vuelta++;          
                 }
+                contadorToken=0;
             }
+            
+            
+            
+            
+            
+            
+            
+            
+            vuelta=0;
             System.out.println("Introduzca matriz máxima -->"); //numeroProcesos
-            for (int i = 0; i < numeroProcesos.size(); i++) {
+            for (int i = 0; i < numeroProcesos.size()/3; i++) {
                 for (int j = 0; j < numeroRecursos.size(); j++) {
-                    maximos[i][j] = sc.nextInt();  //matriz maxima
+                    //maximos[i][j] = sc.nextInt();  //matriz maxima
+                    
+                       
+                        maximos[i][j] = arrayProcesos[vuelta];
+                        //System.out.println(maximos[i][j]);
+                        
+                        vuelta++;
+                        
+                        
                 }
+                
             }
+            
+            System.out.println(nSolicitados);
+            System.out.println("----------------------------------------------------------");
             System.out.println("Introduzca matriz disponibles -->"); //numeroRecursos
             for (int j = 0; j < numeroRecursos.size(); j++) {
-                disponibles[0][j] = sc.nextInt();  //matriz de disponibles
+                //disponibles[0][j] = sc.nextInt();  //matriz de disponibles
+                disponibles[0][j] = arrayRecursos[j]; 
+                System.out.println(disponibles[0][j]);
             }
         }
     }

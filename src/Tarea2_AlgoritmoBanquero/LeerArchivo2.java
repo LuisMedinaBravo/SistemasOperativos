@@ -91,7 +91,7 @@ public class LeerArchivo2 {
 						
 					}
                                         
-                                        total= primero+segundo+tercero;
+                                        total= primero+" "+segundo+" "+tercero;
                                         derecha.add((total));
 				}
 
@@ -103,13 +103,13 @@ public class LeerArchivo2 {
 			e.printStackTrace();
 		}
 
-		System.out.println("Lista Recursos: ");
+		
 		for (int i = 0; i < listaRecursos.size(); i++) {
-			System.out.println(listaRecursos.get(i));
+			//System.out.println(listaRecursos.get(i));
 		}
-		System.out.println("Lista Procesos: ");
+		
 		for (int i = 0; i < listaProcesos.size(); i++) {
-			System.out.println(listaProcesos.get(i));
+			//System.out.println(listaProcesos.get(i));
 		}
 		System.out.println("Izquierda: ");
 		for (int i = 0; i < izquierda.size(); i++) {
