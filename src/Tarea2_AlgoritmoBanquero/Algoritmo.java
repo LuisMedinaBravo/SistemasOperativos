@@ -1,5 +1,6 @@
 package Tarea2_AlgoritmoBanquero;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 
@@ -15,6 +16,7 @@ public class Algoritmo {
         
         public int numeroProcesos;
         public int numeroRecursos;
+        public int nSolicitados;
 
     private void entrada() {
         
@@ -56,11 +58,11 @@ public class Algoritmo {
             necesarios = new int[numeroProcesos][numeroRecursos];  //inicializacion de arrays
             maximos = new int[numeroProcesos][numeroRecursos];
             
-            asignados = new int[numeroProcesos][numeroRecursos];
+            asignados = new int[nSolicitados][numeroRecursos];
             disponibles = new int[1][numeroRecursos];
             
             System.out.println("Introduzca matriz de asignados -->");
-            for (int i = 0; i < numeroProcesos; i++) {
+            for (int i = 0; i < nSolicitados; i++) {
                 for (int j = 0; j < numeroRecursos; j++) {
                     asignados[i][j] = sc.nextInt();  //matriz de asignados
                 }
@@ -100,21 +102,27 @@ public class Algoritmo {
         return true;
     }
 
-    public void esSeguro() {
+    public void esSeguro(int listaSolicitudes) {
+    	this.nSolicitados=listaSolicitudes;
         entrada();
         calculoNecesarios();
-        boolean done[] = new boolean[numeroProcesos];
+        boolean done[] = new boolean[nSolicitados];
         int j = 0;
-
-        while (j < numeroProcesos) {  //hasta que todos los procesos se asignen
+       
+        while (j < nSolicitados) {  //hasta que todos los procesos se asignen
             boolean asignado = false;
             for (int i = 0; i < numeroProcesos; i++) {
-                if (!done[i] && chequear(i)) {  //intentando asignar
+                if (!done[j] && chequear(i)) {  //intentando asignar
                     for (int k = 0; k < numeroRecursos; k++) {
                         disponibles[0][k] = disponibles[0][k] - necesarios[i][k] + maximos[i][k];
                     }
                     System.out.println("Proceso asignado : " + i);
-                    asignado = done[i] = true;
+                    System.out.print("Proceso "+i+" asigna:");
+                    for (int k = 0; k < numeroRecursos; k++) {
+                    	System.out.print(asignados[j][k]);
+					}
+                    System.out.println("");
+                    asignado = done[j] = true;
                     j++;
                 }
             }

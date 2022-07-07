@@ -15,7 +15,7 @@ import Tarea1_Threads.Main;
 public class LeerArchivo2 {
 	ArrayList<Integer> listaRecursos = new ArrayList<Integer>();
 	ArrayList<Integer> listaProcesos = new ArrayList<Integer>();
-	ArrayList<String> listaSolicitudes = new ArrayList<String>();
+	static ArrayList<String> listaSolicitudes = new ArrayList<String>();
 	int contLineas = 0;
 	String nextToken;
 
