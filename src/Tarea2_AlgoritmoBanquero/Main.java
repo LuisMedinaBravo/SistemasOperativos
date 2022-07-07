@@ -8,7 +8,7 @@ public class Main {
         
             //new Algoritmo().esSeguro();
             
-            LeerArchivo2 a = new LeerArchivo2();
-            new Algoritmo().esSeguro(a.listaSolicitudes.size());
+            LeerArchivo2 obj = new LeerArchivo2();
+            // Algoritmo().esSeguro(a.izquierda.size());
     }
 }

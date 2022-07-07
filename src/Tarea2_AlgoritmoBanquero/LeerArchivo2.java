@@ -15,9 +15,15 @@ import Tarea1_Threads.Main;
 public class LeerArchivo2 {
 	ArrayList<Integer> listaRecursos = new ArrayList<Integer>();
 	ArrayList<Integer> listaProcesos = new ArrayList<Integer>();
+        
+        ArrayList<String> izquierda = new ArrayList<String>();
+        ArrayList<String> derecha = new ArrayList<String>();
+        
 	static ArrayList<String> listaSolicitudes = new ArrayList<String>();
 	int contLineas = 0;
+        int cont= 0;
 	String nextToken;
+        String primero,segundo,tercero,total;
 
 	public LeerArchivo2() {
 
@@ -53,12 +59,44 @@ public class LeerArchivo2 {
 						
 						
 					}
-				} else {
-					listaSolicitudes.add(line);
+				} else if(nextToken.equals("proceso") == true){
+					//listaSolicitudes.add(line);
+                                        
+                                        while (str_arr.hasMoreTokens()) {
+						nextToken = str_arr.nextToken();
+						if (cont == 0) {
+							
+                                                    izquierda.add((nextToken));
+							
+						} 
+                                                
+                                                if (cont == 2) {
+							
+                                                    primero=nextToken;
+							
+						} 
+                                                 if (cont == 3) {
+							
+                                                    segundo=nextToken;
+							
+						} 
+                                                  if (cont == 4) {
+							
+                                                    tercero=nextToken;
+							
+						} 
+                                                
+                                                
+						cont++;
+						
+					}
+                                        
+                                        total= primero+segundo+tercero;
+                                        derecha.add((total));
 				}
 
 				contLineas++;
-
+                                cont=0;
 			}
 		} catch (IOException e) {
 			System.out.println("An error occurred.");
@@ -73,9 +111,19 @@ public class LeerArchivo2 {
 		for (int i = 0; i < listaProcesos.size(); i++) {
 			System.out.println(listaProcesos.get(i));
 		}
-		System.out.println("Lista Solicitudes: ");
-		for (int i = 0; i < listaSolicitudes.size(); i++) {
-			System.out.println(listaSolicitudes.get(i));
+		System.out.println("Izquierda: ");
+		for (int i = 0; i < izquierda.size(); i++) {
+			System.out.println(izquierda.get(i));
 		}
+                System.out.println("Derecha: ");
+		for (int i = 0; i < derecha.size(); i++) {
+			System.out.println(derecha.get(i));
+		}
+                
+                
+                //llamada a la clase Algoritmo
+                Algoritmo obj = new Algoritmo();
+                obj.esSeguro(izquierda.size(),listaRecursos, listaProcesos, izquierda, derecha);
+                
 	}
 }
