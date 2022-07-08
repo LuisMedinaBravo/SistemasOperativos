@@ -13,7 +13,9 @@ public class Algoritmo {
         
                asignados[][],
                maximos[][],
-               disponibles[][];
+               disponibles[][],
+               copiaDisponibles[][];
+               
     
         public String
             
@@ -30,6 +32,7 @@ public class Algoritmo {
         ArrayList<ArrayList<String>> procesosQueFaltan;
         
         ArrayList<String> orden = new ArrayList<String>();
+        ArrayList<int[]> esperando = new ArrayList<int[]>();
 
     public void entrada(ArrayList<Integer> numeroRecursos, ArrayList<Integer> numeroProcesos, ArrayList<String> izquierda, ArrayList<String> derecha, int numProcesos) {
         
@@ -86,6 +89,7 @@ public class Algoritmo {
             
             asignados = new int[nSolicitados][numeroRecursos.size()];
             disponibles = new int[1][numeroRecursos.size()];
+            //esperando = new int[nSolicitados][numeroRecursos.size()];
             
             
             //System.out.println("Introduzca matriz de asignados -->"); ///derechs separar por tokens
@@ -154,10 +158,18 @@ public class Algoritmo {
     }
 
     private int[][] calculoNecesarios(int numRecursos, int numProcesos) {
+    	int[][] necesarioCopia = necesarios;
         for (int i = 0; i < numProcesos; i++) {
             for (int j = 0; j < numRecursos; j++) //calculando matriz de necesarios
             {
-                necesarios[i][j] = maximos[i][j] - asignados[i][j];
+            	necesarioCopia[i][j] = maximos[i][j] - asignados[i][j];
+            	if (necesarioCopia[i][j]>=0) {
+            		System.out.println("necesarios = " +maximos[i][j] + " - " +  asignados[i][j]);
+            		necesarios[i][j] = maximos[i][j] - asignados[i][j];
+				}else {
+					System.out.println("espera");
+					necesarios[i][j] = maximos[i][j] - asignados[i][j];
+				}
             }
         }
 
@@ -166,21 +178,93 @@ public class Algoritmo {
 
     private boolean chequear(int i, int numRecursos) {
         //chequeando si todos los recursos para el proceso pueden ser asignados
+    	//System.out.println("Si respondemos la solicitud actual ");
         for (int j = 0; j < numRecursos; j++) {
+        	//System.out.println("Es "+disponibles[0][j]+" < "+  necesarios[i][j]) ;
             if (disponibles[0][j] < necesarios[i][j]) {
+            	
                 return false;
-            }
+            }else {
+            	
+			}
         }
 
         return true;
     }
 
+    public boolean chequearEstado(int i, ArrayList<String> izquierda, int[][]disponiblesActuales){
+    	copiaDisponibles = new int[disponiblesActuales.length][3];
+    	for (int j = 0; j < disponiblesActuales.length; j++) {
+    		copiaDisponibles[j][0]=disponiblesActuales[j][0] ;
+    		copiaDisponibles[j][1]=disponiblesActuales[j][1] ;
+    		copiaDisponibles[j][2]=disponiblesActuales[j][2] ;
+		}
+    	
+    	for (int j = 0; j < 3; j++) {
+    		//Copia disponible restado
+    		copiaDisponibles[0][j] = copiaDisponibles[0][j] - asignados[i][j];
+    	}
+    	
+    	int contNoRespuestas=0;
+    	System.out.println("");
+    	System.out.println("Si respondemos la siguiente solicitud del proceso: "+izquierda.get(i));
+    		for (int j2 = 0; j2 < necesarios.length; j2++) {
+    			
+	    			if (copiaDisponibles[0][0] >= necesarios[j2][0] && copiaDisponibles[0][1] >= necesarios[j2][1]
+	    					&& copiaDisponibles[0][2] >= necesarios[j2][2]) {
+	    				
+	        			System.out.println("Puede responder por lo menos a uno: del proceso "+j2);
+	        			System.out.println(copiaDisponibles[0][0]+ ">="+ necesarios[j2][0] +" "+ copiaDisponibles[0][1]+ " >= " +necesarios[j2][1]
+		    					+" " +copiaDisponibles[0][2]+" >= "+necesarios[j2][2]);
+	        			System.out.println("");
+	                	return true;
+	                }
+	    			
+	    			System.out.println(copiaDisponibles[0][0]+ ">="+ necesarios[j2][0] +" "+ copiaDisponibles[0][1]+ " >= " +necesarios[j2][1]
+	    					+" " +copiaDisponibles[0][2]+" >= "+necesarios[j2][2]);
+	    			contNoRespuestas++;
+    		}
+    		System.out.println("no respondio a "+contNoRespuestas +" de "+necesarios.length);
+    		if (contNoRespuestas==necesarios.length) {
+    			
+    			esperando.add(asignados[i]);
+        		System.out.println("NO PUEDE RESPONDER POR LO MENOS A UNO, SE ASIGNO PROCESO "+izquierda.get(i) +" PIDE " +asignados[i][0]
+        				+""+asignados[i][1]+""+asignados[i][2]+ " A LA LISTA DE ESPERA" );
+        
+        		System.out.println("lista de espera: " + esperando.get(0)[0]+""+esperando.get(0)[1]+""+esperando.get(0)[2]);
+			}
+    		
+		
+		return false;
+		
+		
+		
+	}
+    public boolean chequearEspera(int i, ArrayList<String> izquierda, int[][]disponiblesActuales){
+    	for (int j = 0; j < disponiblesActuales.length; j++) {
+			
+		}
+		
+		return false;
+		
+		
+		
+	}
     public void esSeguro(int listaSolicitudes, ArrayList<Integer> numeroRecursos, ArrayList<Integer> numeroProcesos, 
     		ArrayList<String> izquierda, ArrayList<String> derecha, int numProcesos) {
     	
         this.nSolicitados=listaSolicitudes;
         entrada(numeroRecursos, numeroProcesos, izquierda, derecha, numProcesos);
-        calculoNecesarios(numeroRecursos.size(),numProcesos);
+        //calculoNecesarios(numeroRecursos.size(),numProcesos);
+        //No hay allocations
+        necesarios = maximos;
+        for (int j = 0; j < necesarios.length; j++) {
+        	
+        	necesarios[j][0]=maximos[j][0] ;
+        	necesarios[j][1]=maximos[j][1] ;
+        	necesarios[j][2]=maximos[j][2] ;
+        	System.out.println("Necesarios " +necesarios[j][0]+""+necesarios[j][1]+""+necesarios[j][2]+"");
+		}
         boolean done[] = new boolean[nSolicitados];
         int j = 0;
         
@@ -192,10 +276,44 @@ public class Algoritmo {
         while (j < nSolicitados) {  //hasta que todos los procesos se asignen
             boolean asignado = false;
             for (int i = 0; i < numProcesos; i++) {
-                if (!done[j] && chequear(i,numeroRecursos.size())) {  //intentando asignar
+                if (!done[j] && chequear(i,numeroRecursos.size() )&& chequearEstado(j, izquierda, disponibles)) {  //intentando asignar
+                	System.out.println("Disponibles ");
                     for (int k = 0; k < numeroRecursos.size(); k++) {
-                        disponibles[0][k] = disponibles[0][k] - necesarios[i][k] + maximos[i][k];
+                    	//System.out.println("ALGO "+disponibles[0][k]+" = "+disponibles[0][k]+" - "+necesarios[i][k]+" + "+maximos[i][k]);
+                        // disponibles[0][k] = disponibles[0][k] - necesarios[i][k] + maximos[i][k];
+                    	
+                    	// CHECK WAIT 
+                    	// SI LA SIGUIENTE QUEDA EN ESTADO SEGURO 
+                    	
+                    	System.out.println("           "+(disponibles[0][k]-asignados[j][k])+" = "+disponibles[0][k]+" - "+asignados[j][k]);
+                    	disponibles[0][k] = disponibles[0][k] - asignados[j][k];
+                    
+                    	
+                    	
+                   
                     }
+                    System.out.println("Necesarios ");
+                    for (int k = 0; k < numeroRecursos.size(); k++) {
+                    	//System.out.println("ALGO "+disponibles[0][k]+" = "+disponibles[0][k]+" - "+necesarios[i][k]+" + "+maximos[i][k]);
+                        // disponibles[0][k] = disponibles[0][k] - necesarios[i][k] + maximos[i][k];
+                    	
+                    	// CHECK WAIT 
+                    	// SI LA SIGUIENTE QUEDA EN ESTADO SEGURO 
+                    	
+                    	System.out.println("           "+(necesarios[Integer.parseInt(izquierda.get(j))][k]-asignados[j][k])+" = "
+                    			+ ""+necesarios[Integer.parseInt(izquierda.get(j))][k]+" - "+asignados[j][k]);
+                    	necesarios[Integer.parseInt(izquierda.get(j))][k] = necesarios[Integer.parseInt(izquierda.get(j))][k] - asignados[j][k];
+                    
+                    	
+                    	
+                   
+                    }
+                    
+                
+                    for (int z = 0; z < necesarios.length; z++) {
+                        
+                    	System.out.println("Necesarios " +necesarios[z][0]+""+necesarios[z][1]+""+necesarios[z][2]+"");
+            		}
                     System.out.print("Proceso "+izquierda.get(j)+" asigna ");
                    
                     for (int k = 0; k < numeroRecursos.size(); k++) {
@@ -216,12 +334,14 @@ public class Algoritmo {
 					}
                    
                     
-                    
                     System.out.println("");
                     asignado = done[j] = true;
-                    j++;
+                    
+                   
                     
                 }
+              
+                j++;
             }
             if (!asignado) {
                 break;  //si no esta asignado
