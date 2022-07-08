@@ -28,7 +28,7 @@ public class LeerArchivo2 {
 
 	public LeerArchivo2() {
 
-		String file = "prueba.txt";
+		String file = "data.txt";
 		
 		try (BufferedReader br = new BufferedReader(new FileReader(file))) {
 			

@@ -30,6 +30,9 @@ public class Algoritmo {
         ArrayList<ArrayList<String>> procesosQueFaltan;
         
         ArrayList<String> orden = new ArrayList<String>();
+        
+        
+        
 
     public void entrada(ArrayList<Integer> numeroRecursos, ArrayList<Integer> numeroProcesos, ArrayList<String> izquierda, ArrayList<String> derecha, int numProcesos) {
         
@@ -235,7 +238,7 @@ public class Algoritmo {
         }
       
         }catch(Exception e){
-        	  System.out.println("\nTodos los procesos se pueden asignar de forma segura\n");
+        	  //System.out.println("\nTodos los procesos se pueden asignar de forma segura\n");
                   System.out.print("Orden de termino de los procesos: ");
                   for (int i = 0; i < orden.size(); i++) {
 			System.out.print(orden.get(i)+" ");
