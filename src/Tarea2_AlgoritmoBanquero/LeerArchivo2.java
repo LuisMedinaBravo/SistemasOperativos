@@ -111,11 +111,11 @@ public class LeerArchivo2 {
 		for (int i = 0; i < listaProcesos.size(); i++) {
 			//System.out.println(listaProcesos.get(i));
 		}
-		System.out.println("Izquierda: ");
+		//System.out.println("Izquierda: ");
 		for (int i = 0; i < izquierda.size(); i++) {
 			//System.out.println(izquierda.get(i));
 		}
-                System.out.println("Derecha: ");
+            //    System.out.println("Derecha: ");
 		for (int i = 0; i < derecha.size(); i++) {
 			//System.out.println(derecha.get(i));
 		}

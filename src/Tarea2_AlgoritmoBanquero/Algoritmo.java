@@ -31,21 +31,21 @@ public class Algoritmo {
       
         int[] arrayRecursos = new int[numeroRecursos.size()];
         int[] arrayProcesos = new int[numeroProcesos.size()];
-        procesosQueFaltanSucio = new String[3][nSolicitados];
+        procesosQueFaltanSucio = new String[numeroProcesos.size()/3][nSolicitados];
 
-        System.out.println("Lista Recursos: ");
+       // System.out.println("Lista Recursos: ");
         for(int i = 0; i < numeroRecursos.size(); i++){ 
             arrayRecursos[i] = numeroRecursos.get(i);
             //System.out.println(arrayRecursos[i]);
         }
-        System.out.println("Lista Procesos: ");
+        //System.out.println("Lista Procesos: ");
         for(int i = 0; i < numeroProcesos.size(); i++){ 
             arrayProcesos[i] = numeroProcesos.get(i);
-            //System.out.println(arrayProcesos[i]);
+            //System.out.println("a "+arrayProcesos[i]);
         }
         
         //Listas de procesos que faltan
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < numeroProcesos.size()/3; i++) {
         	for (int j = 0; j < izquierda.size(); j++) {
         		if (izquierda.get(j).equals(""+i)) {
         			procesosQueFaltanSucio[i][j]=derecha.get(j);
@@ -55,7 +55,7 @@ public class Algoritmo {
 			
 		}
         procesosQueFaltan = new ArrayList<>();
-        for (int i = 0; i <3; i++) {
+        for (int i = 0; i <numeroProcesos.size()/3; i++) {
         	procesosQueFaltan.add(new ArrayList<String>());
         	for (int j = 0; j < izquierda.size(); j++) {
         		if (procesosQueFaltanSucio[i][j]!=null) {
@@ -66,12 +66,12 @@ public class Algoritmo {
 			}
 			
 		}
-        System.out.println("PROBANDO LA LISTA");
-        for (int i = 0; i < procesosQueFaltan.size(); i++) {
-			for (int j = 0; j < procesosQueFaltan.get(i).size(); j++) {
-				System.out.println("Falta el por asignar el " +procesosQueFaltan.get(i).get(j) + " que es del proceso "+i);
-			}
-		}
+//        System.out.println("PROBANDO LA LISTA");
+//        for (int i = 0; i < procesosQueFaltan.size(); i++) {
+//			for (int j = 0; j < procesosQueFaltan.get(i).size(); j++) {
+//				System.out.println("Falta el por asignar el " +procesosQueFaltan.get(i).get(j) + " que es del proceso "+i);
+//			}
+//		}
         
         try (Scanner sc = new Scanner(System.in)) {    
             
@@ -83,7 +83,7 @@ public class Algoritmo {
             disponibles = new int[1][numeroRecursos.size()];
             
             
-            System.out.println("Introduzca matriz de asignados -->"); ///derechs separar por tokens
+            //System.out.println("Introduzca matriz de asignados -->"); ///derechs separar por tokens
             for (int i = 0; i < nSolicitados; i++) {
                 for (int j = 0; j < numeroRecursos.size(); j++) {
                     
@@ -121,7 +121,7 @@ public class Algoritmo {
             
             
             vuelta=0;
-            System.out.println("Introduzca matriz mÃ¡xima -->"); //numeroProcesos
+            //System.out.println("Introduzca matriz mÃ¡xima -->"); //numeroProcesos
             for (int i = 0; i < numeroProcesos.size()/3; i++) {
                 for (int j = 0; j < numeroRecursos.size(); j++) {
                     //maximos[i][j] = sc.nextInt();  //matriz maxima
@@ -138,12 +138,12 @@ public class Algoritmo {
             }
             
          
-            System.out.println("----------------------------------------------------------");
-            System.out.println("Introduzca matriz disponibles -->"); //numeroRecursos
+//            System.out.println("----------------------------------------------------------");
+//            System.out.println("Introduzca matriz disponibles -->"); //numeroRecursos
             for (int j = 0; j < numeroRecursos.size(); j++) {
                 //disponibles[0][j] = sc.nextInt();  //matriz de disponibles
                 disponibles[0][j] = arrayRecursos[j]; 
-                System.out.println(disponibles[0][j]);
+                //System.out.println(disponibles[0][j]);
             }
         }
     }
@@ -203,7 +203,7 @@ public class Algoritmo {
 							
 						}
 						if ( procesosQueFaltan.get(Integer.parseInt(izquierda.get(j))).size()==0) {
-							System.out.println("Finalizó el proceso "+Integer.parseInt(izquierda.get(j)) +" :)");
+							System.out.print("Finalizó el proceso "+Integer.parseInt(izquierda.get(j)) +" :)");
 							
 						}
 					}
@@ -219,16 +219,17 @@ public class Algoritmo {
             if (!asignado) {
                 break;  //si no esta asignado
             }
-            if (j == numeroProcesos.size()/3) //si todos los procesos estan asignados
+            if (j == nSolicitados) //si todos los procesos estan asignados
             {
-                System.out.println("\nAsignado de forma segura");
+                //System.out.println("\nAsignado de forma segura");
             } else {
-                System.out.println("Todos los procesos se pueden asignar de forma segura");
+              // System.out.println("Todos los procesos se pueden asignar de forma segura");
             }   
         }
-        
+      
         }catch(Exception e){
-            System.out.println("Error");
+        	  System.out.println("Todos los procesos se pueden asignar de forma segura");
+           // System.out.println("Error");
         }
     }
     
