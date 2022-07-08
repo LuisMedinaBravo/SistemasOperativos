@@ -22,6 +22,7 @@ public class LeerArchivo2 {
 	static ArrayList<String> listaSolicitudes = new ArrayList<String>();
 	int contLineas = 0;
         int cont= 0;
+        int contProcesos=0;
 	String nextToken;
         String primero,segundo,tercero,total;
 
@@ -39,12 +40,24 @@ public class LeerArchivo2 {
 				StringTokenizer str_arr = new StringTokenizer(line);
 				
 				nextToken = str_arr.nextToken();
+                          
+                                 if((contLineas>2) && (nextToken.equals("proceso") == false)){
+                                    
+                                    contProcesos++;
+                                    
+                                }
+                                
+                                
 				if (contLineas == 1) {
 					
 
 					listaRecursos.add(Integer.parseInt(nextToken));
+                               
+                                
+                                
 				} else if (contLineas > 2 && nextToken.equals("proceso") == false) {
 					listaProcesos.add(Integer.parseInt(nextToken));
+                                       
 				}
 				if (nextToken.equals("proceso") == false) {
 					while (str_arr.hasMoreTokens()) {
@@ -120,10 +133,9 @@ public class LeerArchivo2 {
 			//System.out.println(derecha.get(i));
 		}
                 
-                
                 //llamada a la clase Algoritmo
                 Algoritmo obj = new Algoritmo();
-                obj.esSeguro(izquierda.size(),listaRecursos, listaProcesos, izquierda, derecha);
+                obj.esSeguro(izquierda.size(),listaRecursos, listaProcesos, izquierda, derecha,contProcesos);
                 
 	}
 }

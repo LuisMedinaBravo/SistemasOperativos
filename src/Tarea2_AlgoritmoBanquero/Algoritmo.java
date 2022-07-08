@@ -8,12 +8,14 @@ import java.util.StringTokenizer;
 
 public class Algoritmo {
 
-    public int necesarios[][],
         
-            asignados[][],
-            maximos[][],
-            disponibles[][];
-    public String
+        public int necesarios[][],
+        
+               asignados[][],
+               maximos[][],
+               disponibles[][];
+    
+        public String
             
             procesosQueFaltanSucio[][],
             ordenProcesosFinalizados[];
@@ -24,14 +26,17 @@ public class Algoritmo {
         int vuelta=0;
                             
         public int nSolicitados;
+        
         ArrayList<ArrayList<String>> procesosQueFaltan;
+        
+        ArrayList<String> orden = new ArrayList<String>();
 
-    public void entrada(ArrayList<Integer> numeroRecursos, ArrayList<Integer> numeroProcesos, ArrayList<String> izquierda, ArrayList<String> derecha) {
+    public void entrada(ArrayList<Integer> numeroRecursos, ArrayList<Integer> numeroProcesos, ArrayList<String> izquierda, ArrayList<String> derecha, int numProcesos) {
         
       
         int[] arrayRecursos = new int[numeroRecursos.size()];
         int[] arrayProcesos = new int[numeroProcesos.size()];
-        procesosQueFaltanSucio = new String[numeroProcesos.size()/3][nSolicitados];
+        procesosQueFaltanSucio = new String[numProcesos][nSolicitados];
 
        // System.out.println("Lista Recursos: ");
         for(int i = 0; i < numeroRecursos.size(); i++){ 
@@ -45,7 +50,7 @@ public class Algoritmo {
         }
         
         //Listas de procesos que faltan
-        for (int i = 0; i < numeroProcesos.size()/3; i++) {
+        for (int i = 0; i < numProcesos; i++) {
         	for (int j = 0; j < izquierda.size(); j++) {
         		if (izquierda.get(j).equals(""+i)) {
         			procesosQueFaltanSucio[i][j]=derecha.get(j);
@@ -55,7 +60,7 @@ public class Algoritmo {
 			
 		}
         procesosQueFaltan = new ArrayList<>();
-        for (int i = 0; i <numeroProcesos.size()/3; i++) {
+        for (int i = 0; i <numProcesos; i++) {
         	procesosQueFaltan.add(new ArrayList<String>());
         	for (int j = 0; j < izquierda.size(); j++) {
         		if (procesosQueFaltanSucio[i][j]!=null) {
@@ -76,8 +81,8 @@ public class Algoritmo {
         try (Scanner sc = new Scanner(System.in)) {    
             
             
-            necesarios = new int[numeroProcesos.size()/3][numeroRecursos.size()];  //inicializacion de arrays
-            maximos = new int[numeroProcesos.size()/3][numeroRecursos.size()];
+            necesarios = new int[numProcesos][numeroRecursos.size()];  //inicializacion de arrays
+            maximos = new int[numProcesos][numeroRecursos.size()];
             
             asignados = new int[nSolicitados][numeroRecursos.size()];
             disponibles = new int[1][numeroRecursos.size()];
@@ -122,7 +127,7 @@ public class Algoritmo {
             
             vuelta=0;
             //System.out.println("Introduzca matriz máxima -->"); //numeroProcesos
-            for (int i = 0; i < numeroProcesos.size()/3; i++) {
+            for (int i = 0; i < numProcesos; i++) {
                 for (int j = 0; j < numeroRecursos.size(); j++) {
                     //maximos[i][j] = sc.nextInt();  //matriz maxima
                     
@@ -171,26 +176,27 @@ public class Algoritmo {
     }
 
     public void esSeguro(int listaSolicitudes, ArrayList<Integer> numeroRecursos, ArrayList<Integer> numeroProcesos, 
-    		ArrayList<String> izquierda, ArrayList<String> derecha) {
+    		ArrayList<String> izquierda, ArrayList<String> derecha, int numProcesos) {
     	
         this.nSolicitados=listaSolicitudes;
-        entrada(numeroRecursos, numeroProcesos, izquierda, derecha);
-        calculoNecesarios(numeroRecursos.size(),numeroProcesos.size()/3);
+        entrada(numeroRecursos, numeroProcesos, izquierda, derecha, numProcesos);
+        calculoNecesarios(numeroRecursos.size(),numProcesos);
         boolean done[] = new boolean[nSolicitados];
         int j = 0;
         
         
         try{
         
+        System.out.println("Asignaciones de recursos :");
         
         while (j < nSolicitados) {  //hasta que todos los procesos se asignen
             boolean asignado = false;
-            for (int i = 0; i < numeroProcesos.size()/3; i++) {
+            for (int i = 0; i < numProcesos; i++) {
                 if (!done[j] && chequear(i,numeroRecursos.size())) {  //intentando asignar
                     for (int k = 0; k < numeroRecursos.size(); k++) {
                         disponibles[0][k] = disponibles[0][k] - necesarios[i][k] + maximos[i][k];
                     }
-                    System.out.print("Proceso "+izquierda.get(j)+" se le asigna:");
+                    System.out.print("Proceso "+izquierda.get(j)+" asigna ");
                    
                     for (int k = 0; k < numeroRecursos.size(); k++) {
                     	System.out.print(asignados[j][k]+" ");
@@ -203,8 +209,9 @@ public class Algoritmo {
 							
 						}
 						if ( procesosQueFaltan.get(Integer.parseInt(izquierda.get(j))).size()==0) {
-							System.out.print("Finaliz� el proceso "+Integer.parseInt(izquierda.get(j)) +" :)");
-							
+							//System.out.print("Finaliz� el proceso "+Integer.parseInt(izquierda.get(j)) +" :)");
+                                                        orden.add(izquierda.get(j));
+							//array list con el orden de término de los procesos
 						}
 					}
                    
@@ -228,34 +235,13 @@ public class Algoritmo {
         }
       
         }catch(Exception e){
-        	  System.out.println("Todos los procesos se pueden asignar de forma segura");
+        	  System.out.println("\nTodos los procesos se pueden asignar de forma segura\n");
+                  System.out.print("Orden de termino de los procesos: ");
+                  for (int i = 0; i < orden.size(); i++) {
+			System.out.print(orden.get(i)+" ");
+		}
+                  
            // System.out.println("Error");
         }
     }
-    
-    
-    public int ValidarEntrada(String Entrada){
-            
-            
-            ///es numero?
-            try{
-                //si es numero
-                int esNumero=Integer.parseInt(Entrada);
-                
-                if((esNumero>0)){
-                    return 1;
-                }
-                else{
-                    return 0;
-                }   
-                
-                
-            }catch(Exception e){
-                //no es numero
-                return 0;
-            }
-            
-        }
-    
-    
 }
