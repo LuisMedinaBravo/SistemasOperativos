@@ -1,6 +1,7 @@
 package Tarea2_AlgoritmoBanquero;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 
@@ -12,19 +13,26 @@ public class Algoritmo {
             asignados[][],
             maximos[][],
             disponibles[][];
+    public String
+            
+            procesosQueFaltanSucio[][],
+            ordenProcesosFinalizados[];
+    
         public String Procesos;
         public String Recursos;
         
         int vuelta=0;
                             
         public int nSolicitados;
+        ArrayList<ArrayList<String>> procesosQueFaltan;
 
     public void entrada(ArrayList<Integer> numeroRecursos, ArrayList<Integer> numeroProcesos, ArrayList<String> izquierda, ArrayList<String> derecha) {
         
       
         int[] arrayRecursos = new int[numeroRecursos.size()];
         int[] arrayProcesos = new int[numeroProcesos.size()];
-        
+        procesosQueFaltanSucio = new String[3][nSolicitados];
+
         System.out.println("Lista Recursos: ");
         for(int i = 0; i < numeroRecursos.size(); i++){ 
             arrayRecursos[i] = numeroRecursos.get(i);
@@ -36,6 +44,34 @@ public class Algoritmo {
             //System.out.println(arrayProcesos[i]);
         }
         
+        //Listas de procesos que faltan
+        for (int i = 0; i < 3; i++) {
+        	for (int j = 0; j < izquierda.size(); j++) {
+        		if (izquierda.get(j).equals(""+i)) {
+        			procesosQueFaltanSucio[i][j]=derecha.get(j);
+				}
+        		
+			}
+			
+		}
+        procesosQueFaltan = new ArrayList<>();
+        for (int i = 0; i <3; i++) {
+        	procesosQueFaltan.add(new ArrayList<String>());
+        	for (int j = 0; j < izquierda.size(); j++) {
+        		if (procesosQueFaltanSucio[i][j]!=null) {
+        			//System.out.println("Falta el por asignar el " +procesosQueFaltanSucio[i][j] + " que es del proceso "+i);
+        			procesosQueFaltan.get(i).add(procesosQueFaltanSucio[i][j]);
+				}
+        		
+			}
+			
+		}
+        System.out.println("PROBANDO LA LISTA");
+        for (int i = 0; i < procesosQueFaltan.size(); i++) {
+			for (int j = 0; j < procesosQueFaltan.get(i).size(); j++) {
+				System.out.println("Falta el por asignar el " +procesosQueFaltan.get(i).get(j) + " que es del proceso "+i);
+			}
+		}
         
         try (Scanner sc = new Scanner(System.in)) {    
             
@@ -134,14 +170,15 @@ public class Algoritmo {
         return true;
     }
 
-    public void esSeguro(int listaSolicitudes, ArrayList<Integer> numeroRecursos, ArrayList<Integer> numeroProcesos, ArrayList<String> izquierda, ArrayList<String> derecha) {
+    public void esSeguro(int listaSolicitudes, ArrayList<Integer> numeroRecursos, ArrayList<Integer> numeroProcesos, 
+    		ArrayList<String> izquierda, ArrayList<String> derecha) {
     	
         this.nSolicitados=listaSolicitudes;
         entrada(numeroRecursos, numeroProcesos, izquierda, derecha);
         calculoNecesarios(numeroRecursos.size(),numeroProcesos.size()/3);
         boolean done[] = new boolean[nSolicitados];
         int j = 0;
-  
+        
         
         try{
         
@@ -153,11 +190,26 @@ public class Algoritmo {
                     for (int k = 0; k < numeroRecursos.size(); k++) {
                         disponibles[0][k] = disponibles[0][k] - necesarios[i][k] + maximos[i][k];
                     }
-                    System.out.println("Proceso asignado : " + i);
-                    System.out.print("Proceso "+i+" asigna:");
+                    System.out.print("Proceso "+izquierda.get(j)+" se le asigna:");
+                   
                     for (int k = 0; k < numeroRecursos.size(); k++) {
-                    	System.out.print(asignados[j][k]);
+                    	System.out.print(asignados[j][k]+" ");
+                    	
+                    	
                     }
+                    for (int k = 0; k < procesosQueFaltan.get(Integer.parseInt(izquierda.get(j))).size(); k++) {
+						if ( procesosQueFaltan.get(Integer.parseInt(izquierda.get(j))).get(k).equals(derecha.get(j))) {
+							procesosQueFaltan.get(Integer.parseInt(izquierda.get(j))).remove(k);
+							
+						}
+						if ( procesosQueFaltan.get(Integer.parseInt(izquierda.get(j))).size()==0) {
+							System.out.println("Finalizó el proceso "+Integer.parseInt(izquierda.get(j)) +" :)");
+							
+						}
+					}
+                   
+                    
+                    
                     System.out.println("");
                     asignado = done[j] = true;
                     j++;
